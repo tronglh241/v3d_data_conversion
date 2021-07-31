@@ -1,0 +1,17 @@
+in_bat3d_adapter:
+  module: modules.label.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    label_dir: '''annotations/CAM_FRONT_LEFT'''
+    label_stem: '''NuScenes_*_annotations'''
+
+out_yolotianxiaomo_adapter:
+  module: modules.label.adapter
+  class: YOLOTianxiaomoOutAdapter
+  YOLOTianxiaomoOutAdapter:
+    label_filename: '''train.txt'''
+    image_dir: '''images/CAM_FRONT_LEFT'''
+    class_id:
+      Motorbike: 0
+      Car: 1
+      Pedestrian: 2

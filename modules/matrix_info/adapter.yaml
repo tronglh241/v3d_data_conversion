@@ -1,0 +1,27 @@
+in_bat3d:
+  module: modules.matrix_info.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    out_rig_stem: '''output-rig-*'''
+    cam_name: '''cameraFov150'''
+
+in_bat3d_cam150:
+  module: modules.matrix_info.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    out_rig_stem: '''output-rig-*'''
+    cam_name: '''cameraFov150'''
+
+in_bat3d_cam60:
+  module: modules.matrix_info.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    out_rig_stem: '''output-rig-*'''
+    cam_name: '''cameraMainFov60'''
+
+in_bat3d_cam30:
+  module: modules.matrix_info.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    out_rig_stem: '''output-rig-*'''
+    cam_name: '''cameraFov30'''
