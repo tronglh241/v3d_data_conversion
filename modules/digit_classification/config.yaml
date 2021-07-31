@@ -1,0 +1,7 @@
+neural_net:
+  module: modules.digit_classification.neural_net.detector
+  class: NeuralNet
+  NeuralNet:
+    image_size: (28, 28)
+    weight_path: '''models/weights/mnist_cnn.pth'''
+    device: '''cpu'''
