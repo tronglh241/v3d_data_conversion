@@ -1,5 +1,6 @@
 import argparse
 import os
+import shutil
 import sys
 import traceback
 from pathlib import Path
@@ -10,6 +11,7 @@ from tqdm import tqdm
 sys.path.append(os.getcwd())
 
 from converter import Converter  # noqa: E402
+from utils.common import open_file  # noqa: E402
 
 
 def parse_args():
@@ -73,10 +75,34 @@ if __name__ == '__main__':
     # Convert data
     out_dir = Path(args.out_dir)
     converter = Converter(args.config)
+    converted_seq_dirs = []
 
     for seq_dir in tqdm(seq_dirs):
         try:
             converter(str(seq_dir), args.out_dir)
+            converted_seq_dirs.append(seq_dir)
         except Exception as e:
             print(f'Error while converting {seq_dir}', e)
             traceback.print_exc()
+
+    train_split = converted_seq_dirs[:round(len(converted_seq_dirs) * args.train_ratio)]
+    test_split = converted_seq_dirs[round(len(converted_seq_dirs) * args.train_ratio):]
+    val_split = train_split[round(len(train_split) * (1.0 - args.val_ratio_in_train)):]
+    train_split = train_split[:round(len(train_split) * (1.0 - args.val_ratio_in_train))]
+
+    split_map = {
+        'train': train_split,
+        'val': val_split,
+        'test': test_split,
+    }
+
+    for split_name, split in split_map.items():
+        with open_file(str(out_dir.joinpath(f'{split_name}.txt')), mode='w', encoding='utf-8') as fw:
+            for seq_dir in split:
+                with open(str(out_dir.joinpath(seq_dir.name, converter.stages.label.out_adapter.label_filename)),
+                          mode='r', encoding='utf-8') as fr:
+                    fw.writelines(fr)
+
+    rm_dirs = [str(dir_) for dir_ in out_dir.glob('*') if dir_.is_dir()]
+    for dir_ in rm_dirs:
+        shutil.rmtree(dir_)

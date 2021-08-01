@@ -5,6 +5,13 @@ in_bat3d_adapter:
     label_dir: '''annotations/CAM_FRONT_LEFT'''
     label_stem: '''NuScenes_*_annotations'''
 
+in_scale_ai_adapter:
+  module: modules.label.adapter
+  class: ScaleAIInAdapter
+  ScaleAIInAdapter:
+    label_dir: '''annotations'''
+    label_stem: '''vin_3d_annotation'''
+
 out_yolotianxiaomo_adapter:
   module: modules.label.adapter
   class: YOLOTianxiaomoOutAdapter
@@ -15,3 +22,5 @@ out_yolotianxiaomo_adapter:
       Motorbike: 0
       Car: 1
       Pedestrian: 2
+    rm_thres: 0.8
+    rm_box_ratio: 0.2

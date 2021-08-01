@@ -4,6 +4,8 @@ import numpy as np
 
 from dto.bat3d.instance import Instance as BAT3DInstance
 from dto.kitti.label.instance import Instance as KITTIInstance
+from dto.scale_ai.instance import Instance as ScaleAIInstance
+from dto.scale_ai.instance import Instance3D as ScaleAIInstance3D
 from utils.kitti import calc_alpha, compute_box_3d
 from utils.matrix import homo_mat, map_dimension, point_3d_transfrom
 
@@ -66,3 +68,20 @@ def bat3d_to_kitti(bat3d_instance: BAT3DInstance, extrinsic: np.ndarray, intrins
     # Alpha
     alpha = calc_alpha(location, rotation_y)
     return KITTIInstance(type_, truncated, occluded, bbox, alpha, dimensions, location, rotation_y, score, track_id)
+
+
+def scale_ai_to_bat3d(scale_ai_instance: ScaleAIInstance, track_id: int, frame_id: int) -> BAT3DInstance:
+    if isinstance(scale_ai_instance, ScaleAIInstance3D):
+        class_ = scale_ai_instance.label
+        width = scale_ai_instance.dimensions.x
+        length = scale_ai_instance.dimensions.y
+        height = scale_ai_instance.dimensions.z
+        x = scale_ai_instance.position.x
+        y = scale_ai_instance.position.y
+        z = scale_ai_instance.position.z
+        rotationY = scale_ai_instance.yaw
+        bat3d_instance = BAT3DInstance(class_, width, length, height, x, y, z, rotationY, track_id, frame_id)
+    else:
+        raise NotImplementedError
+
+    return bat3d_instance
