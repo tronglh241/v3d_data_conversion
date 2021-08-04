@@ -27,7 +27,7 @@ if __name__ == '__main__':
             boxes = [boxes[i:i + 5] for i in range(0, len(boxes), 5)]
 
             image = cv2.imread(image_file)
-            image_file = out_dir.joinpath(*Path(image_file).parts[-4:])
+            image_file = out_dir.joinpath('_'.join([Path(image_file).parts[-4], *Path(image_file).parts[-2:]]))
             image_file.parent.mkdir(parents=True, exist_ok=True)
 
             for box in boxes:
