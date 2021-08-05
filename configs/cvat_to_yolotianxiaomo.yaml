@@ -1,0 +1,6 @@
+label:
+  module: modules.label.label
+  class: LabelProcessing
+  LabelProcessing:
+    mode: '''label_to_yolotianxiaomo_cvat'''
+    in_adapter_mode: '''in_cvat_adapter'''

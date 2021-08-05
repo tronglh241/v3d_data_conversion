@@ -69,3 +69,27 @@ label_to_reid_cam30:
     image_dir: '''images/CAM_FRONT'''
     rm_thres: 0.8
     rm_box_ratio: 0.2
+
+label_to_yolotianxiaomo_cvat:
+  module: modules.label.label_to_yolotianxiaomo.processor
+  class: LabelProcessor
+  LabelProcessor:
+    classes_id:
+      Motorbike: 0
+      Car: 1
+      Pedestrian: 2
+    image_dir: '''images'''
+    rm_thres: 0.8
+    rm_box_ratio: 0.2
+
+label_to_reid_cvat:
+  module: modules.label.label_to_reid.processor
+  class: LabelProcessor
+  LabelProcessor:
+    classes_id:
+      Motorbike: 0
+      Car: 1
+      Pedestrian: 2
+    image_dir: '''images'''
+    rm_thres: 0.8
+    rm_box_ratio: 0.2

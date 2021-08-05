@@ -7,6 +7,7 @@ from abstract.processor import Processor
 from dto.bat3d.frame import Frame as BAT3DFrame
 from dto.bat3d.label import Label as BAT3DLabel
 from dto.box.box2d import Box2D
+from dto.cvat.label import Label as CVATLabel
 from dto.scale_ai.label import Label as ScaleAILabel
 from dto.seq.seq_info import SeqInfo
 from utils.common import get_file_with_stem
@@ -22,16 +23,16 @@ class LabelProcessor(Processor):
         self.rm_box_ratio = rm_box_ratio
 
     def preprocess(self, seq_info: SeqInfo, label: Any) -> Tuple[SeqInfo, List[str], List[List[Box2D]]]:
-        image_dir = str(Path(seq_info.seq_dir).joinpath(self.image_dir))
-        extrinsic = seq_info.extrinsic
-        intrinsic = seq_info.intrinsic
-        assert extrinsic is not None
-        assert intrinsic is not None
+        image_dir = Path(seq_info.seq_dir).joinpath(self.image_dir)
 
         image_files: List[str] = []
         frames: List[List[Box2D]] = []
 
         if isinstance(label, (BAT3DLabel, ScaleAILabel)):
+            extrinsic = seq_info.extrinsic
+            intrinsic = seq_info.intrinsic
+            assert extrinsic is not None
+            assert intrinsic is not None
             if isinstance(label, ScaleAILabel):
                 bat3d_frames = []
                 for frame in label.frames:
@@ -42,7 +43,7 @@ class LabelProcessor(Processor):
                 label = BAT3DLabel(bat3d_frames)
 
             for bat3d_frame in label.frames:
-                image_file = get_file_with_stem(image_dir, bat3d_frame.name)
+                image_file = get_file_with_stem(str(image_dir), bat3d_frame.name)
 
                 if image_file is None:
                     raise FileNotFoundError(f'{bat3d_frame.name} not found.')
@@ -85,6 +86,42 @@ class LabelProcessor(Processor):
                     boxes = [Box2D(int(ins.bbox[0]), int(ins.bbox[1]), int(ins.bbox[2]), int(ins.bbox[3]), ins.type,
                                    ins.track_id) for ins in kitti_instances]
                     frames.append(boxes)
+        elif isinstance(label, CVATLabel):
+            for cvat_frame in label.frames:
+                image_files.append(str(image_dir.joinpath(cvat_frame.name).resolve()))
+                boxes = []
+                for cvat_instance in cvat_frame.instances:
+                    xs = [cvat_instance.xbl1, cvat_instance.xbl2, cvat_instance.xbr1, cvat_instance.xbr2,
+                          cvat_instance.xtl1, cvat_instance.xtl2, cvat_instance.xtr1, cvat_instance.xtr2]
+                    ys = [cvat_instance.ybl1, cvat_instance.ybl2, cvat_instance.ybr1, cvat_instance.ybr2,
+                          cvat_instance.ytl1, cvat_instance.ytl2, cvat_instance.ytr1, cvat_instance.ytr2]
+                    left = max(round(min(xs)), 0)
+                    right = min(round(max(xs)), cvat_frame.width)
+                    top = max(round(min(ys)), 0)
+                    bottom = min(round(max(ys)), cvat_frame.height)
+                    type_ = cvat_instance.label
+                    track_id = cvat_instance.track_id
+                    if (right - left) / (bottom - top) > self.rm_box_ratio:
+                        boxes.append(Box2D(left, top, right, bottom, type_, track_id))
+                boxes.sort(key=lambda box: (box.right - box.left) * (box.bottom - box.top))
+                rm_boxes = []
+                for i, box1 in enumerate(boxes):
+                    for box2 in boxes[i + 1:]:
+                        xA = max(box1.left, box2.left)
+                        yA = max(box1.top, box2.top)
+                        xB = min(box1.right, box2.right)
+                        yB = min(box1.bottom, box2.bottom)
+
+                        interArea = max(0, xB - xA + 1) * max(0, yB - yA + 1)
+                        boxAArea = ((box1.right - box1.left + 1)
+                                    * (box1.bottom - box1.top + 1))
+
+                        if interArea / boxAArea > self.rm_thres:
+                            rm_boxes.append(box1)
+                            break
+                for box in rm_boxes:
+                    boxes.remove(box)
+                frames.append(boxes)
         else:
             raise TypeError('Not handled type.')
 

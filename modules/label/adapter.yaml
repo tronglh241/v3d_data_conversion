@@ -18,3 +18,10 @@ in_bat3d_adapter_cam30:
   BAT3DInAdapter:
     label_dir: '''annotations/CAM_FRONT'''
     label_stem: '''NuScenes_*_annotations'''
+
+in_cvat_adapter:
+  module: modules.label.adapter
+  class: CVATInAdapter
+  CVATInAdapter:
+    label_dir: '''linking_annotations'''
+    label_stem: '''linking'''
