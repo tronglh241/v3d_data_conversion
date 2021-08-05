@@ -87,7 +87,9 @@ class LabelProcessor(Processor):
                     frames.append(boxes)
         elif isinstance(label, CVATLabel):
             for cvat_frame in label.frames:
-                image_files.append(str(image_dir.joinpath(cvat_frame.name).resolve()))
+                image_file = str(image_dir.joinpath(cvat_frame.name).resolve())
+                height, width, _ = cv2.imread(image_file).shape
+                image_files.append(image_file)
                 boxes = []
                 for cvat_instance in cvat_frame.instances:
                     xs = [cvat_instance.xbl1, cvat_instance.xbl2, cvat_instance.xbr1, cvat_instance.xbr2,
@@ -95,9 +97,9 @@ class LabelProcessor(Processor):
                     ys = [cvat_instance.ybl1, cvat_instance.ybl2, cvat_instance.ybr1, cvat_instance.ybr2,
                           cvat_instance.ytl1, cvat_instance.ytl2, cvat_instance.ytr1, cvat_instance.ytr2]
                     left = max(round(min(xs)), 0)
-                    right = min(round(max(xs)), cvat_frame.width)
+                    right = min(round(max(xs)), width)
                     top = max(round(min(ys)), 0)
-                    bottom = min(round(max(ys)), cvat_frame.height)
+                    bottom = min(round(max(ys)), height)
                     type_ = cvat_instance.label
                     track_id = cvat_instance.track_id
                     if (right - left) / (bottom - top) > self.rm_box_ratio:
