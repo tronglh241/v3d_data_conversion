@@ -25,3 +25,12 @@ in_cvat_adapter:
   CVATInAdapter:
     label_dir: '''linking_annotations'''
     label_stem: '''linking'''
+
+out_yolo_adapter:
+  module: modules.label.adapter
+  class: YOLOOutAdapter
+  YOLOOutAdapter:
+    classes_id:
+      Motorbike: 0
+      Car: 1
+      Pedestrian: 2

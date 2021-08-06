@@ -1,0 +1,41 @@
+matrix_info_cam150:
+  module: modules.matrix_info.matrix_info
+  class: MatrixInfo
+  MatrixInfo:
+    in_adapter_mode: '''in_bat3d_cam150'''
+
+label_cam150:
+  module: modules.label.label
+  class: LabelProcessing
+  LabelProcessing:
+    mode: '''bat3d_to_box2d_cam150'''
+    in_adapter_mode: '''in_bat3d_adapter_cam150'''
+    out_adapter_mode: '''out_yolo_adapter'''
+
+matrix_info_cam60:
+  module: modules.matrix_info.matrix_info
+  class: MatrixInfo
+  MatrixInfo:
+    in_adapter_mode: '''in_bat3d_cam60'''
+
+label_cam60:
+  module: modules.label.label
+  class: LabelProcessing
+  LabelProcessing:
+    mode: '''bat3d_to_box2d_cam60'''
+    in_adapter_mode: '''in_bat3d_adapter_cam60'''
+    out_adapter_mode: '''out_yolo_adapter'''
+
+matrix_info_cam30:
+  module: modules.matrix_info.matrix_info
+  class: MatrixInfo
+  MatrixInfo:
+    in_adapter_mode: '''in_bat3d_cam30'''
+
+label_cam30:
+  module: modules.label.label
+  class: LabelProcessing
+  LabelProcessing:
+    mode: '''bat3d_to_box2d_cam30'''
+    in_adapter_mode: '''in_bat3d_adapter_cam30'''
+    out_adapter_mode: '''out_yolo_adapter'''
