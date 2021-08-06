@@ -34,3 +34,4 @@ out_yolo_adapter:
       Motorbike: 0
       Car: 1
       Pedestrian: 2
+      Truck: 3
