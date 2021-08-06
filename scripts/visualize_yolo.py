@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 
 import cv2
+from tqdm import tqdm
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -20,7 +21,7 @@ if __name__ == '__main__':
     }
     class_mapping = {v: k for k, v in class_mapping.items()}
 
-    for label_file in data_dir.glob('**/*.txt'):
+    for label_file in tqdm(list(data_dir.glob('**/*.txt'))):
         image_file = str(Path(str(label_file).replace('labels', 'images')).with_suffix('.jpg'))
         image = cv2.imread(image_file)
 
