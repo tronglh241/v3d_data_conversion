@@ -8,8 +8,9 @@ label_cam150:
   module: modules.label.label
   class: LabelProcessing
   LabelProcessing:
-    mode: '''label_to_reid_cam150'''
+    mode: '''bat3d_to_box2d_cam150'''
     in_adapter_mode: '''in_bat3d_adapter_cam150'''
+    out_adapter_mode: '''out_market1501_adapter'''
 
 matrix_info_cam60:
   module: modules.matrix_info.matrix_info
@@ -21,8 +22,9 @@ label_cam60:
   module: modules.label.label
   class: LabelProcessing
   LabelProcessing:
-    mode: '''label_to_reid_cam60'''
+    mode: '''bat3d_to_box2d_cam60'''
     in_adapter_mode: '''in_bat3d_adapter_cam60'''
+    out_adapter_mode: '''out_market1501_adapter'''
 
 matrix_info_cam30:
   module: modules.matrix_info.matrix_info
@@ -34,5 +36,6 @@ label_cam30:
   module: modules.label.label
   class: LabelProcessing
   LabelProcessing:
-    mode: '''label_to_reid_cam30'''
+    mode: '''bat3d_to_box2d_cam30'''
     in_adapter_mode: '''in_bat3d_adapter_cam30'''
+    out_adapter_mode: '''out_market1501_adapter'''

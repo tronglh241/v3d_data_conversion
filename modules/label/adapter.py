@@ -185,3 +185,39 @@ class YOLOOutAdapter(OutAdapter):
                             height = (box.bottom - box.top) / image_height
                             f.write(f'{type_id} {center_x} {center_y} {width} {height}\n')
         return seq_info,
+
+
+class Market1501OutAdapter(OutAdapter):
+    instance_ids: Dict[str, int] = {}
+
+    def __init__(self, classes_id: Dict[str, int], cams_id: Dict[str, int]):
+        super(Market1501OutAdapter, self).__init__()
+        self.classes_id = classes_id
+        self.cams_id = cams_id
+
+    def convert(self, stage_input: Tuple[SeqInfo], stage_output: Tuple[SeqInfo, List[str], List[List[Box2D]]]) \
+            -> Tuple[SeqInfo]:
+        seq_info, image_files, frames = stage_output
+        out_dir = Path(seq_info.out_dir)
+
+        for image_file, frame in zip(image_files, frames):
+            if any([box.type in self.classes_id for box in frame]):
+                seq_name = seq_info.seq_name
+                cam_name = Path(image_file).parts[-2]
+                image_name = Path(image_file).stem
+                image = cv2.imread(image_file)
+                cam_id = self.cams_id[cam_name]
+
+                for box in frame:
+                    instance_dirname = f'{seq_name}_{box.type}_{box.track_id}'
+
+                    if instance_dirname not in Market1501OutAdapter.instance_ids:
+                        Market1501OutAdapter.instance_ids[instance_dirname] = len(Market1501OutAdapter.instance_ids) + 1
+
+                    instance_id = Market1501OutAdapter.instance_ids[instance_dirname]
+                    instance_file = out_dir.joinpath(f'{instance_id:04d}', f'{cam_id:04d}',
+                                                     f'{seq_name}_{cam_name}_{image_name}.jpg')
+                    instance_file.parent.mkdir(parents=True, exist_ok=True)
+                    instance_img = image[box.top:box.bottom, box.left:box.right]
+                    cv2.imwrite(str(instance_file), instance_img)
+        return seq_info,

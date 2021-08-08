@@ -3,6 +3,7 @@ import os
 import shutil
 import sys
 import traceback
+from datetime import datetime
 from pathlib import Path
 
 from natsort import natsorted
@@ -11,14 +12,15 @@ from tqdm import tqdm
 sys.path.append(os.getcwd())
 
 from converter import Converter  # noqa: E402
+from utils.common import open_file  # noqa: E402
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('config')
     parser.add_argument('out_dir')
     parser.add_argument('root_dir')
 
-    parser.add_argument('--config', default='configs/bat3d_to_reid.yaml')
     parser.add_argument('--delivery-dir', '-d', nargs='*')
     parser.add_argument('--seq-dir', '-s', nargs='*')
     parser.add_argument('--seq-from', '-sf', type=int)
@@ -73,16 +75,19 @@ if __name__ == '__main__':
 
     # Convert data
     out_dir = Path(args.out_dir)
-    if out_dir.exists() and len(list(out_dir.iterdir())):
+
+    if len(list(out_dir.glob('*'))):
         raise RuntimeError('out_dir is not empty.')
+
     converter = Converter(args.config)
 
     for seq_dir in tqdm(seq_dirs):
         try:
             converter(str(seq_dir), args.out_dir)
         except Exception as e:
-            print(f'Error while converting {seq_dir}', e)
-            traceback.print_exc()
+            with open_file('log.txt', mode='a', encoding='utf-8') as f:
+                f.write(f'{datetime.now()}: Error while converting {seq_dir}, {e}\n')
+                f.write(f'{traceback.format_exc()}\n')
 
     instances = [dir_ for dir_ in out_dir.glob('*')]
     train_split = instances[:round(len(instances) * args.train_ratio)]
@@ -97,11 +102,19 @@ if __name__ == '__main__':
     }
 
     for split_name, split in split_map.items():
-        split_dir = out_dir.joinpath(split_name)
-        split_dir.mkdir(parents=True, exist_ok=True)
+        out_split_dir = out_dir.joinpath(split_name)
+        instance_cnt = 1
+
         for instance in split:
-            if len(list(instance.iterdir())) >= args.num_of_instances:
-                shutil.move(str(instance), str(split_dir))
-    for dir_ in out_dir.iterdir():
-        if dir_.stem not in split_map:
+            if len(list(instance.glob('**/*.jpg'))) >= args.num_of_instances:
+                _out_split_dir = out_split_dir.joinpath(f'{instance_cnt:04d}')
+                _out_split_dir.mkdir(parents=True, exist_ok=True)
+
+                for dir_ in instance.glob('*'):
+                    shutil.move(str(dir_), str(_out_split_dir))
+
+                instance_cnt += 1
+
+    for dir_ in out_dir.glob('*'):
+        if dir_.name not in split_map:
             shutil.rmtree(str(dir_))

@@ -35,3 +35,17 @@ out_yolo_adapter:
       Car: 1
       Pedestrian: 2
       Truck: 3
+
+out_market1501_adapter:
+  module: modules.label.adapter
+  class: Market1501OutAdapter
+  Market1501OutAdapter:
+    classes_id:
+      Motorbike: 0
+      Car: 1
+      Pedestrian: 2
+      Truck: 3
+    cams_id:
+      CAM_FRONT_LEFT: 0
+      CAM_FRONT: 1
+      CAM_FRONT_RIGHT: 2

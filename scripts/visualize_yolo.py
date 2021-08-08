@@ -18,6 +18,7 @@ if __name__ == '__main__':
         'Motorbike': 0,
         'Car': 1,
         'Pedestrian': 2,
+        'Truck': 3,
     }
     class_mapping = {v: k for k, v in class_mapping.items()}
 
