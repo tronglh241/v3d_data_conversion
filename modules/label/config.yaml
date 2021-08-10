@@ -1,52 +1,4 @@
-label_to_reid_cam150:
-  module: modules.label.label_to_reid.processor
-  class: LabelProcessor
-  LabelProcessor:
-    classes_id:
-      Motorbike: 0
-      Car: 1
-      Pedestrian: 2
-    image_dir: '''images/CAM_FRONT_RIGHT'''
-    rm_thres: 0.8
-    rm_box_ratio: 0.2
-
-label_to_reid_cam60:
-  module: modules.label.label_to_reid.processor
-  class: LabelProcessor
-  LabelProcessor:
-    classes_id:
-      Motorbike: 0
-      Car: 1
-      Pedestrian: 2
-    image_dir: '''images/CAM_FRONT_LEFT'''
-    rm_thres: 0.8
-    rm_box_ratio: 0.2
-
-label_to_reid_cam30:
-  module: modules.label.label_to_reid.processor
-  class: LabelProcessor
-  LabelProcessor:
-    classes_id:
-      Motorbike: 0
-      Car: 1
-      Pedestrian: 2
-    image_dir: '''images/CAM_FRONT'''
-    rm_thres: 0.8
-    rm_box_ratio: 0.2
-
-label_to_reid_cvat:
-  module: modules.label.label_to_reid.processor
-  class: LabelProcessor
-  LabelProcessor:
-    classes_id:
-      Motorbike: 0
-      Car: 1
-      Pedestrian: 2
-    image_dir: '''images'''
-    rm_thres: 0.8
-    rm_box_ratio: 0.2
-
-bat3d_to_box2d_cam150:
+label_to_box2d_cam150:
   module: modules.label.label_to_box2d.processor
   class: LabelProcessor
   LabelProcessor:
@@ -54,7 +6,7 @@ bat3d_to_box2d_cam150:
     rm_thres: 0.8
     rm_box_ratio: 0.2
 
-bat3d_to_box2d_cam60:
+label_to_box2d_cam60:
   module: modules.label.label_to_box2d.processor
   class: LabelProcessor
   LabelProcessor:
@@ -62,10 +14,14 @@ bat3d_to_box2d_cam60:
     rm_thres: 0.8
     rm_box_ratio: 0.2
 
-bat3d_to_box2d_cam30:
+label_to_box2d_cam30:
   module: modules.label.label_to_box2d.processor
   class: LabelProcessor
   LabelProcessor:
     image_dir: '''images/CAM_FRONT'''
     rm_thres: 0.8
     rm_box_ratio: 0.2
+
+label_to_kitti:
+  module: modules.label.label_to_kitti.processor
+  class: LabelProcessor

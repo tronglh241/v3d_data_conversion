@@ -14,6 +14,7 @@ from dto.coco.info import Info as COCOInfo
 from dto.coco.label import Label as COCOLabel
 from dto.coco.license import License as COCOLicense
 from dto.cvat.label import Label as CVATLabel
+from dto.kitti.label.label import Label as KITTILabel
 from dto.scale_ai.label import Label as ScaleAILabel
 from dto.seq.seq_info import SeqInfo
 from utils.common import get_file_with_stem, open_file
@@ -25,7 +26,7 @@ class BAT3DInAdapter(InAdapter):
         self.label_dir = label_dir
         self.label_stem = label_stem
 
-    def convert(self, stage_input: Tuple[SeqInfo]) -> Tuple[SeqInfo, BAT3DLabel]:
+    def convert(self, stage_input: Tuple[SeqInfo]) -> Tuple[SeqInfo, BAT3DLabel, str]:
         seq_info = stage_input[0]
         label_dir = Path(seq_info.seq_dir).joinpath(self.label_dir)
         label_file = get_file_with_stem(str(label_dir), self.label_stem)
@@ -34,7 +35,7 @@ class BAT3DInAdapter(InAdapter):
             raise FileNotFoundError('Annotation file not found.')
 
         label = BAT3DLabel.fromfile(label_file)
-        return seq_info, label
+        return seq_info, label, label_file
 
 
 class ScaleAIInAdapter(InAdapter):
@@ -43,7 +44,7 @@ class ScaleAIInAdapter(InAdapter):
         self.label_dir = label_dir
         self.label_stem = label_stem
 
-    def convert(self, stage_input: Tuple[SeqInfo]) -> Tuple[SeqInfo, ScaleAILabel]:
+    def convert(self, stage_input: Tuple[SeqInfo]) -> Tuple[SeqInfo, ScaleAILabel, str]:
         seq_info = stage_input[0]
         label_dir = Path(seq_info.seq_dir).joinpath(self.label_dir)
         label_file = get_file_with_stem(str(label_dir), self.label_stem)
@@ -52,7 +53,7 @@ class ScaleAIInAdapter(InAdapter):
             raise FileNotFoundError('Annotation file not found.')
 
         label = ScaleAILabel.fromfile(label_file)
-        return seq_info, label
+        return seq_info, label, label_file
 
 
 class CVATInAdapter(InAdapter):
@@ -61,7 +62,7 @@ class CVATInAdapter(InAdapter):
         self.label_dir = label_dir
         self.label_stem = label_stem
 
-    def convert(self, stage_input: Tuple[SeqInfo]) -> Tuple[SeqInfo, CVATLabel]:
+    def convert(self, stage_input: Tuple[SeqInfo]) -> Tuple[SeqInfo, CVATLabel, str]:
         seq_info = stage_input[0]
         label_dir = Path(seq_info.seq_dir).joinpath(self.label_dir)
         label_file = get_file_with_stem(str(label_dir), self.label_stem)
@@ -70,7 +71,7 @@ class CVATInAdapter(InAdapter):
             raise FileNotFoundError('Annotation file not found.')
 
         label = CVATLabel.fromfile(label_file)
-        return seq_info, label
+        return seq_info, label, label_file
 
 
 class COCOOutAdapter(OutAdapter):
@@ -220,4 +221,16 @@ class Market1501OutAdapter(OutAdapter):
                     instance_file.parent.mkdir(parents=True, exist_ok=True)
                     instance_img = image[box.top:box.bottom, box.left:box.right]
                     cv2.imwrite(str(instance_file), instance_img)
+        return seq_info,
+
+
+class KITTIOutAdapter(OutAdapter):
+    def __init__(self, label_dir: str):
+        super(KITTIOutAdapter, self).__init__()
+        self.label_dir = label_dir
+
+    def convert(self, stage_input: Tuple[SeqInfo], stage_output: Tuple[SeqInfo, KITTILabel]) -> Tuple[SeqInfo]:
+        seq_info, label = stage_output
+        label_dir = Path(seq_info.out_dir).joinpath(seq_info.seq_name, self.label_dir)
+        label.tofile(str(label_dir))
         return seq_info,

@@ -1,7 +1,6 @@
 from typing import Dict, Tuple
 
 import numpy as np
-import torch
 
 
 def homo_mat(transform_matrix: np.ndarray) -> np.ndarray:
@@ -26,23 +25,12 @@ def inv_mat(transform_matrix: np.ndarray, ret_homo: bool = False) -> np.ndarray:
     return transform_matrix
 
 
-def point_3d_transfrom(points: np.ndarray, transform_matrix: np.ndarray, cuda: bool = False,
-                       device: str = 'cuda') -> np.ndarray:
+def point_3d_transfrom(points: np.ndarray, transform_matrix: np.ndarray) -> np.ndarray:
     points = np.hstack((points, np.ones((points.shape[0], 1))))
     assert len(points.shape) == 2 and points.shape[1] == 4
     assert all(points[:, 3] == 1.0)
     transform_matrix = homo_mat(transform_matrix)
-    points = points.T
-
-    if cuda:
-        transform_matrix = torch.from_numpy(transform_matrix).to(device)  # type: ignore
-        points = torch.from_numpy(points).to(device)  # type: ignore
-
-    points = transform_matrix @ points
-
-    if cuda:
-        points = points.cpu().numpy()
-
+    points = transform_matrix @ points.T
     points = points.T
     points = points / points[:, 3:]
     points = points[:, :3]

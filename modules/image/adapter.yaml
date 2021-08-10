@@ -1,0 +1,50 @@
+in_bat3d:
+  module: modules.image.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    image_dir: '''images/CAM_FRONT_RIGHT'''
+
+in_bat3d_cam150:
+  module: modules.image.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    image_dir: '''images/CAM_FRONT_RIGHT'''
+    image_suffix: '''.jpeg'''
+
+in_bat3d_cam60:
+  module: modules.image.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    image_dir: '''images/CAM_FRONT_LEFT'''
+    image_suffix: '''.jpeg'''
+
+in_bat3d_cam30:
+  module: modules.image.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    image_dir: '''images/CAM_FRONT'''
+    image_suffix: '''.jpeg'''
+
+in_bat3d_cam150_first_frame:
+  module: modules.image.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    image_dir: '''images/CAM_FRONT_RIGHT'''
+    image_suffix: '''.jpeg'''
+    file_id: 0
+
+in_bat3d_cam60_first_frame:
+  module: modules.image.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    image_dir: '''images/CAM_FRONT_LEFT'''
+    image_suffix: '''.jpeg'''
+    file_id: 0
+
+in_bat3d_cam30_first_frame:
+  module: modules.image.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    image_dir: '''images/CAM_FRONT'''
+    image_suffix: '''.jpeg'''
+    file_id: 0

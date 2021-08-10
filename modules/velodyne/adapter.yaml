@@ -1,0 +1,18 @@
+in_bat3d:
+  module: modules.velodyne.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    pcd_dirs:
+      - '''pointclouds_org'''
+      - '''pointclouds'''
+    pcd_suffix: '''.pcd'''
+
+in_bat3d_first_frame:
+  module: modules.velodyne.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    pcd_dirs:
+      - '''pointclouds_org'''
+      - '''pointclouds'''
+    pcd_suffix: '''.pcd'''
+    file_id: 0

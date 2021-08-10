@@ -15,8 +15,8 @@ def open_file(file_path: str, *args: Any, **kwargs: Any) -> TextIO:
     return path.open(*args, **kwargs)
 
 
-def get_file_with_stem(dirname: str, stem: str, suffix: str = '*', abs_path: bool = True) -> Optional[str]:
-    files = list(Path(dirname).glob(f'{stem}.{suffix}'))
+def get_file_with_stem(dirname: str, stem: str, suffix: str = '.*', abs_path: bool = True) -> Optional[str]:
+    files = list(Path(dirname).glob(f'{stem}{suffix}'))
 
     if len(files) == 0:
         return None

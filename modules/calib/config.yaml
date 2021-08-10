@@ -1,0 +1,21 @@
+default:
+  module: modules.calib.calib_processor
+  class: CalibProcessor
+  CalibProcessor:
+    calib_dir: '''calib'''
+
+resize_image:
+  module: modules.calib.calib_processor
+  class: CalibProcessor
+  CalibProcessor:
+    calib_dir: '''calib'''
+    image_size: [1224, 370]
+    padding: True
+
+resize_image_no_padding:
+  module: modules.calib.calib_processor
+  class: CalibProcessor
+  CalibProcessor:
+    calib_dir: '''calib'''
+    image_size: [1224, 370]
+    padding: False

@@ -1,0 +1,5 @@
+default:
+  module: modules.org_info.org_info_processor
+  class: OrgInfoProcessor
+  OrgInfoProcessor:
+    org_info_dir: '''org_info'''

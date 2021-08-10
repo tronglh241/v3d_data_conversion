@@ -1,32 +1,39 @@
-in_bat3d_adapter_cam150:
+in_bat3d:
+  module: modules.label.adapter
+  class: BAT3DInAdapter
+  BAT3DInAdapter:
+    label_dir: '''annotations/LIDAR_TOP'''
+    label_stem: '''NuScenes_*_annotations'''
+
+in_bat3d_cam150:
   module: modules.label.adapter
   class: BAT3DInAdapter
   BAT3DInAdapter:
     label_dir: '''annotations/CAM_FRONT_RIGHT'''
     label_stem: '''NuScenes_*_annotations'''
 
-in_bat3d_adapter_cam60:
+in_bat3d_cam60:
   module: modules.label.adapter
   class: BAT3DInAdapter
   BAT3DInAdapter:
     label_dir: '''annotations/CAM_FRONT_LEFT'''
     label_stem: '''NuScenes_*_annotations'''
 
-in_bat3d_adapter_cam30:
+in_bat3d_cam30:
   module: modules.label.adapter
   class: BAT3DInAdapter
   BAT3DInAdapter:
     label_dir: '''annotations/CAM_FRONT'''
     label_stem: '''NuScenes_*_annotations'''
 
-in_cvat_adapter:
+in_cvat:
   module: modules.label.adapter
   class: CVATInAdapter
   CVATInAdapter:
     label_dir: '''linking_annotations'''
     label_stem: '''linking'''
 
-out_yolo_adapter:
+out_yolo:
   module: modules.label.adapter
   class: YOLOOutAdapter
   YOLOOutAdapter:
@@ -36,7 +43,7 @@ out_yolo_adapter:
       Pedestrian: 2
       Truck: 3
 
-out_market1501_adapter:
+out_market1501:
   module: modules.label.adapter
   class: Market1501OutAdapter
   Market1501OutAdapter:
@@ -49,3 +56,9 @@ out_market1501_adapter:
       CAM_FRONT_LEFT: 0
       CAM_FRONT: 1
       CAM_FRONT_RIGHT: 2
+
+out_kitti:
+  module: modules.label.adapter
+  class: KITTIOutAdapter
+  KITTIOutAdapter:
+    label_dir: '''label_2'''

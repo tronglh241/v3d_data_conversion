@@ -13,6 +13,7 @@ class MatrixInfo(Stage):
                    intrinsic: np.ndarray) -> Tuple[SeqInfo]:
         seq_info.extrinsic = extrinsic
         seq_info.intrinsic = intrinsic
+        seq_info.calib_intrinsic = intrinsic
         seq_info.calib_file = calib_file
 
         # # Original

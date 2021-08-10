@@ -1,0 +1,6 @@
+default:
+  module: modules.velodyne.velodyne_processor
+  class: VelodyneProcessor
+  VelodyneProcessor:
+    velodyne_dir: '''velodyne'''
+    n_feature: 4

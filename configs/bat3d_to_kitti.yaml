@@ -1,0 +1,46 @@
+matrix_info:
+  module: modules.matrix_info.matrix_info
+  class: MatrixInfo
+  MatrixInfo:
+    in_adapter_mode: '''in_bat3d'''
+
+velodyne:
+  module: modules.velodyne.velodyne
+  class: Velodyne
+  Velodyne:
+    mode: '''default'''
+    in_adapter_mode: '''in_bat3d'''
+
+image:
+  module: modules.image.image
+  class: Image
+  Image:
+    mode: '''default'''
+    in_adapter_mode: '''in_bat3d'''
+
+calib:
+  module: modules.calib.calib
+  class: Calib
+  Calib:
+    mode: '''default'''
+
+label:
+  module: modules.label.label
+  class: Label
+  Label:
+    mode: '''label_to_kitti'''
+    in_adapter_mode: '''in_bat3d'''
+    out_adapter_mode: '''out_kitti'''
+
+org_info:
+  module: modules.org_info.org_info
+  class: OrgInfo
+  OrgInfo:
+    mode: '''default'''
+
+data_dirs:
+  velodyne: '''.bin'''
+  image_2: '''.png'''
+  calib: '''.txt'''
+  label_2: '''.txt'''
+  org_info: '''.txt'''

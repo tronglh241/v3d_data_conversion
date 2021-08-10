@@ -1,0 +1,21 @@
+default:
+  module: modules.image.image_processor
+  class: ImageProcessor
+  ImageProcessor:
+    image_dir: '''image_2'''
+
+resize_image:
+  module: modules.image.image_processor
+  class: ImageProcessor
+  ImageProcessor:
+    image_dir: '''image_2'''
+    image_size: [1224, 370]
+    padding: True
+
+resize_image_no_padding:
+  module: modules.image.image_processor
+  class: ImageProcessor
+  ImageProcessor:
+    image_dir: '''image_2'''
+    image_size: [1224, 370]
+    padding: False
