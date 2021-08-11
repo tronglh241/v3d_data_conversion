@@ -4,6 +4,7 @@ import numpy as np
 
 from dto.bat3d.instance import Instance as BAT3DInstance
 from dto.kitti.label.instance import Instance as KITTIInstance
+from dto.pred.box3d import LiDARBox3D
 from dto.scale_ai.instance import Instance as ScaleAIInstance
 from dto.scale_ai.instance import Instance3D as ScaleAIInstance3D
 from utils.kitti import calc_alpha, compute_box_3d
@@ -68,6 +69,20 @@ def bat3d_to_kitti(bat3d_instance: BAT3DInstance, extrinsic: np.ndarray, intrins
     # Alpha
     alpha = calc_alpha(location, rotation_y)
     return KITTIInstance(type_, truncated, occluded, bbox, alpha, dimensions, location, rotation_y, score, track_id)
+
+
+def lidar_box3d_to_bat3d(lidar_box3d: LiDARBox3D, trackId: int, frameIdx: int, prelabel: bool = None) -> BAT3DInstance:
+    class_ = lidar_box3d.type.replace('_', ' ') if lidar_box3d.type != 'DontCare' else 'Others'
+    return BAT3DInstance(class_, lidar_box3d.x_size, lidar_box3d.y_size, lidar_box3d.z_size, lidar_box3d.x,
+                         lidar_box3d.y, lidar_box3d.z, lidar_box3d.rotation_y, trackId, frameIdx, lidar_box3d.score,
+                         prelabel)
+
+
+def lidar_box3d_to_kitti(lidar_box3d: LiDARBox3D, Tr_velo_to_cam: np.ndarray, cam_to_image: np.ndarray,
+                         image_size: Tuple[int, int]) -> KITTIInstance:
+    bat3d_instance = lidar_box3d_to_bat3d(lidar_box3d, 0, 0)
+    kitti_instance = bat3d_to_kitti(bat3d_instance, Tr_velo_to_cam, cam_to_image, image_size)
+    return kitti_instance
 
 
 def scale_ai_to_bat3d(scale_ai_instance: ScaleAIInstance, track_id: int, frame_id: int) -> BAT3DInstance:

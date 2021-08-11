@@ -1,0 +1,18 @@
+kitti:
+  module: modules.pred_to_label.kitti.kitti
+  class: KITTIProcessor
+  KITTIProcessor:
+    label_dir: '''label_2'''
+
+bat3d:
+  module: modules.pred_to_label.bat3d.bat3d
+  class: BAT3DProcessor
+  BAT3DProcessor:
+    label_dir: '''annotations/LIDAR_TOP'''
+    prelabel_attr: True
+
+image:
+  module: modules.pred_to_label.image.image
+  class: ImageProcessor
+  ImageProcessor:
+    image_dir: '''image'''

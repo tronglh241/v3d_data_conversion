@@ -11,8 +11,9 @@ class Converter(Project):
 
     def run(self, seq_dir: str, out_dir: str) -> SeqInfo:
         seq_info = SeqInfo(seq_dir, out_dir)
+        output = (seq_info,)
 
         for stage in self.stages:
-            seq_info, = self.stages[stage](seq_info)
+            output = self.stages[stage](*output)
 
         return seq_info

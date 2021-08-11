@@ -1,0 +1,43 @@
+matrix_info:
+  module: modules.matrix_info.matrix_info
+  class: MatrixInfo
+  MatrixInfo:
+    in_adapter_mode: '''in_bat3d'''
+
+velodyne:
+  module: modules.velodyne.velodyne
+  class: Velodyne
+  Velodyne:
+    mode: '''default'''
+    in_adapter_mode: '''in_bat3d_first_frame'''
+
+image:
+  module: modules.image.image
+  class: Image
+  Image:
+    mode: '''default'''
+    in_adapter_mode: '''in_bat3d'''
+
+box3d_pred:
+  module: modules.box3d_pred.box3d_pred
+  class: Box3DPred
+  Box3DPred:
+    mode: '''mmdet3d'''
+    data_dir: '''velodyne'''
+    ret_labels:
+      - '''Car'''
+      - '''Motorbike'''
+
+pred_to_label:
+  module: modules.pred_to_label.pred_to_label
+  class: PredToLabel
+  PredToLabel:
+    mode: '''bat3d'''
+
+rmdir:
+  module: modules.rmdir.rmdir
+  class: RmDir
+  RmDir:
+    rm_dirs:
+      - '''velodyne'''
+      - '''image_2'''

@@ -1,0 +1,11 @@
+mmdet3d:
+  module: modules.box3d_pred.mmdet3d.detector
+  class: Detector
+  Detector:
+    config_path: '''models/weights/box3d_pred/mmdet3d/20210618/second/hv_second_secfpn_6x8_80e_kitti-3d-3class.py'''
+    checkpoint_path: '''models/weights/box3d_pred/mmdet3d/20210618/epoch_50.pth'''
+    classes:
+      - '''Car'''
+      - '''Motorbike'''
+      - '''Pedestrian'''
+    device: '''cuda'''
